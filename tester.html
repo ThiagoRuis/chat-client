@@ -37,7 +37,7 @@
         }
       });
 
-      socket.on('send_message', function(msg) {
+      socket.on('broadcast_message', function(msg) {
         var item = document.createElement('li');
         item.textContent = msg;
         messages.appendChild(item);
