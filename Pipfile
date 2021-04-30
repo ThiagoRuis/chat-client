@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 flask = "*"
 flask-socketio = "*"
+wheel = "*"
+mongoengine = "*"
 
 [dev-packages]
 autopep8 = "*"
