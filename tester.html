@@ -29,7 +29,7 @@
       };
 
       
-      socket = io.connect('http://127.0.0.1:5000', user);
+      socket = io.connect('http://127.0.0.1:5000');
 
       var messages = document.getElementById('messages');
       var form = document.getElementById('form');
@@ -55,6 +55,10 @@
           }
           input.value = '';
         }
+      });
+
+      socket.on('connect', function(){
+        socket.emit('login', user);
       });
 
       socket.on('broadcast_message', function(msg) {

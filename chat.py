@@ -1,3 +1,5 @@
+import json
+
 from flask_socketio import Namespace, emit
 
 from models import User, Message
@@ -12,28 +14,35 @@ class Chat(Namespace):
                 /help (Displays the help info)
         """
 
-    def on_connect(self, user=None):
-        emit('broadcast_message', self.help(), broadcast=True)
+    def on_connect(self):
+        emit('help')  # TODO:check how to call another action
         print('user connected')
 
-    def on_disconnect(self, user=None):
+    def on_disconnect(self):
         print('user disconnected')
 
-    def on_help(self, data, user=None):
+    def on_help(self, data, connected_user=None):
         emit('broadcast_message', self.help(), broadcast=True)
 
-    def on_stock(self, data, user=None):
-        print(f'called stock check to: {data}' )
+    def on_login(self, data):
+        if (user := User.objects(name=data.get('name')).first()) is None:
+            user = User(**data).save()
+            print(f'New User Created: {user.name}')
+        msg = f'{user.name} connected!'
+        emit('broadcast_message', msg, broadcast=True)
 
-    def on_create_user(self, data, user=None):
+    def on_stock(self, data, connected_user=None):
+        print(f'called stock check to: {data}')
+
+    def on_create_user(self, data, connected_user=None):
         new_user = User(name=data).save()
 
         msg = f'New User Created: {new_user.name}'
         emit('broadcast_message', msg, broadcast=True)
 
-    def on_send_message(self, data, user=None):
+    def on_send_message(self, data, connected_user=None):
         message = Message(text=data)
-        message.user = User.objects(name=user)[0]                                                    
+        message.user = User.objects(name=user)[0]
         message.save()
 
         emit('broadcast_message', message, broadcast=True)
