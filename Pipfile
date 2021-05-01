@@ -9,6 +9,7 @@ flask-socketio = "*"
 wheel = "*"
 mongoengine = "*"
 requests = "*"
+kombu = "*"
 
 [dev-packages]
 autopep8 = "*"

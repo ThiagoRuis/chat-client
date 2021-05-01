@@ -10,12 +10,11 @@ from decorators import is_logged
 class ChatService(Namespace):
     #TODO: Check how to handle unknown command
     def on_connect(self):
-        emit('help')  # TODO:check how to call another action
-        print('user connected')
-        emit('help', {'data': 'foo'}, namespace='/commands')
+        print('ChatService connected')
+        emit('help', namespace='/command')
 
     def on_disconnect(self):
-        print('user disconnected')
+        print('ChatService disconnected')
 
     @is_logged
     def on_send_message(self, data):
@@ -28,11 +27,10 @@ class ChatService(Namespace):
 
 class IdentificationService(Namespace):
     def on_connect(self):
-        emit('help')  # TODO:check how to call another action
-        print('user connected')
+        print('IdentificationService connected')
 
     def on_disconnect(self):
-        print('user disconnected')
+        print('IdentificationService disconnected')
 
     def on_login(self, data):
         if (user := User.objects(name=data.get('name')).first()) is None:
@@ -44,11 +42,10 @@ class IdentificationService(Namespace):
 
 class CommandService(Namespace):
     def on_connect(self):
-        emit('help')  # TODO:check how to call another action
-        print('user connected')
+        print('CommandService connected')
 
     def on_disconnect(self):
-        print('user disconnected')
+        print('CommandService disconnected')
 
     def help(self):
         return """
@@ -59,7 +56,7 @@ class CommandService(Namespace):
         """
 
     def on_help(self, data, connected_user=None):
-        emit('broadcast_message', self.help(), broadcast=True)
+        emit('broadcast_message', self.help(), broadcast=True, namespace='chat')
 
     def on_stock(self, data, connected_user=None):
         stock_data = stock_info(data)
