@@ -29,8 +29,10 @@
       };
 
       
-      socket = io.connect('http://127.0.0.1:5000');
-
+      chatConnection = io.connect('http://127.0.0.1:5000/chat');
+      identifyConnection = io.connect('http://127.0.0.1:5000/identify');
+      commandConnection = io.connect('http://127.0.0.1:5000/command');
+      
       var messages = document.getElementById('messages');
       var form = document.getElementById('form');
       var input = document.getElementById('input');
@@ -49,19 +51,19 @@
               command = command.split('=')[0];
             }
 
-            socket.emit(command, msg, user);
+            commandConnection.emit(command, {'msg':msg, 'user':user});
           } else {
-            socket.emit('send_message', input.value, user);
+            chatConnection.emit('send_message', {'msg':input.value, 'user':user});
           }
           input.value = '';
         }
       });
 
-      socket.on('connect', function(){
-        socket.emit('login', user);
+      chatConnection.on('connect', function(){
+        chatConnection.emit('login', user);
       });
 
-      socket.on('broadcast_message', function(msg) {
+      chatConnection.on('broadcast_message', function(msg) {
         var item = document.createElement('li');
         item.textContent = msg;
         messages.appendChild(item);
