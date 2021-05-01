@@ -23,16 +23,36 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
 
     <script>
-      socket = io.connect('http://127.0.0.1:5000');
+      var user = {
+        "name": 'thiago ruis',
+        "email": 'teste@teste.com',
+      };
+
+      
+      socket = io.connect('http://127.0.0.1:5000', user);
 
       var messages = document.getElementById('messages');
       var form = document.getElementById('form');
       var input = document.getElementById('input');
-
+      
       form.addEventListener('submit', function(e) {
         e.preventDefault();
         if (input.value) {
-          socket.emit('send_message', input.value);
+          if (input.value.startsWith('/')) {
+            temp = input.value.split(' ');
+            command = temp[0].slice(1);
+            temp.shift();
+            msg = temp.join(' ');
+
+            if(command.startsWith('stock')) {
+              msg = command.split('=')[1];
+              command = command.split('=')[0];
+            }
+
+            socket.emit(command, msg, user);
+          } else {
+            socket.emit('send_message', input.value, user);
+          }
           input.value = '';
         }
       });

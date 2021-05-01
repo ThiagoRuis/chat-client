@@ -4,23 +4,22 @@ from mongoengine import (
     EmbeddedDocument,
     StringField,
     DateTimeField,
-    EmbeddedDocumentField,
+    ReferenceField,
     ListField,
 )
 
 
-class User(EmbeddedDocument):
-    email = StringField(required=True)
-    first_name = StringField(max_length=50)
-    last_name = StringField(max_length=50)
+class User(Document):
+    email = StringField()
+    name = StringField(required=True)
 
 
 class Message(Document):
     text = StringField()
     timestamp = DateTimeField(default=datetime.utcnow)
-    user = EmbeddedDocumentField(User)
+    user = ReferenceField(User)
 
 
 class Room(Document):
     name = StringField(required=True)
-    users = ListField(EmbeddedDocumentField(User))
+    users = ListField(ReferenceField(User))
