@@ -34,7 +34,7 @@ class Chat(Namespace):
         emit('broadcast_message', msg, broadcast=True)
 
     def on_stock(self, data, connected_user=None):
-        stock_data = stock_info('aapl.us')
+        stock_data = stock_info(data)
         print(f'called stock check to: {data}')
         emit('broadcast_message', json.dumps(stock_data), broadcast=True)
 
