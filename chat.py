@@ -3,9 +3,11 @@ import json
 from flask_socketio import Namespace, emit
 
 from models import User, Message
-
+from stock_bot.services import stock_info
 
 class Chat(Namespace):
+    #TODO: Check how to handle unknown command
+     
     def help(self):
         return """
             Welcome to Ruis ChatAPI!
@@ -32,7 +34,9 @@ class Chat(Namespace):
         emit('broadcast_message', msg, broadcast=True)
 
     def on_stock(self, data, connected_user=None):
+        stock_data = stock_info('aapl.us')
         print(f'called stock check to: {data}')
+        emit('broadcast_message', json.dumps(stock_data), broadcast=True)
 
     def on_create_user(self, data, connected_user=None):
         new_user = User(name=data).save()
