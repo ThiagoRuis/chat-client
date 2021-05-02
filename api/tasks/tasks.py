@@ -7,42 +7,24 @@ from celery import Celery, shared_task
 from celery.utils.log import get_task_logger
 from kombu.exceptions import ConnectionError, HttpError, OperationalError
 
-from stock_bot.celeryconfig import Config
-from stock_bot.services import stock_info
+from api.tasks.celeryconfig import Config
 
-logger = get_task_logger('stock_bot')
+logger = get_task_logger('chat_api')
 
 
-CeleryChatAPI = Celery(
-    'chat_api',
+CeleryStockBot = Celery(
+    'stock_bot',
     broker=f'amqp://{Config.BROKER_USER}:{Config.BROKER_PASS}@{Config.BROKER_HOST}:'
     f'{Config.BROKER_NODE_PORT}/{Config.BROKER_VIRTUAL_HOST}',
 )
 
 
-@contextmanager
-def timeout(time):
-    def raise_timeout(signum, frame):
-        raise TimeoutError
-
-    signal.signal(signal.SIGALRM, raise_timeout)
-    signal.alarm(time)
-
+def send_to_stock_bot(data: dict, task: str, queue: str):
     try:
-        yield
-    except TimeoutError:
-        pass
-    finally:
-        signal.signal(signal.SIGALRM, signal.SIG_IGN)
-
-
-def send_to_chat_api(data: dict, task: str, queue: str):
-    with timeout(5):
-        try:
-            CeleryChatAPI.send_task(task, queue=queue, kwargs=data)
-        except Exception as err:
-            logger.exception(f'Unexpected Error: {err}')
-            raise err
+        CeleryStockBot.send_task(task, queue=queue, kwargs=data)
+    except Exception as err:
+        logger.exception(f'Unexpected Error: {err}')
+        raise err
 
 
 @shared_task(
@@ -50,19 +32,17 @@ def send_to_chat_api(data: dict, task: str, queue: str):
     default_retry_delay=5,
     max_retries=1800 // 5,
     ignore_result=True,
-    autoretry_for=(ConnectionError, TimeoutError, HttpError,
+    autoretry_for=(ConnectionError, HttpError,
                    OperationalError, ConnectionRefusedError, socket.error),
 )
 def get_stock_info(stock_code: str):
     try:
-        info = stock_info(stock_code)
-
-        send_to_chat_api({
-            'stock': json.dumps(info)
+        send_to_stock_bot({
+            'stock': stock_code
         },
-            task='chat_api.get_stock_info',
-            queue='chat_api'
+            task='stock_bot.get_stock_info',
+            queue='stock_bot_info'
         )
-        logger.info(f'Sent stock info to ChatAPI: {stock_code}')
+        logger.info(f'Sent get_stock_info to StockBot: {stock_code}')
     except Exception as err:
         logger.exception(f'Unexpected Error: {err}')

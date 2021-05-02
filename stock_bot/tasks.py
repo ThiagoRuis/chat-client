@@ -54,7 +54,6 @@ def send_to_chat_api(data: dict, task: str, queue: str):
                    OperationalError, ConnectionRefusedError, socket.error),
 )
 def get_stock_info(stock_code: str):
-    teste = 'PARA AQUI FIOO'
     try:
         info = stock_info(stock_code)
 

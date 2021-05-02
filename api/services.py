@@ -4,9 +4,8 @@ from flask_socketio import Namespace, emit
 from kombu import Connection
 
 from models import User, Message
-from stock_bot.services import stock_info
 from decorators import is_logged
-from tasks import StockInfoProducer
+from api.tasks.tasks import get_stock_info
 
 
 class ChatService(Namespace):
@@ -61,19 +60,11 @@ class CommandService(Namespace):
         emit('broadcast_message', self.help(), broadcast=True, namespace='chat')
 
     def on_stock(self, data):
-        search_data = data.get('msg')
-
-        connection = Connection('amqp://guest:guest@localhost:5672//')
-        producer = connection.Producer()
-
-        producer.publish(
-            search_data,
-            exchange='',
-            routing_key='hipri'
-        )
-
+        stock_code = data.get('msg')
+        get_stock_info(stock_code)
+        
         print(f'called stock check to: {data}')
-        emit('broadcast_message', json.dumps(search_data), broadcast=True)
+        emit('broadcast_message', json.dumps(stock_code), broadcast=True)
 
     def on_create_user(self, data, connected_user=None):
         new_user = User(name=data).save()

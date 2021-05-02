@@ -14,7 +14,7 @@ broker_url = (
 
 task_acks_late = True
 task_store_errors_even_if_ignored = True
-task_default_queue = 'stock_bot_tasks'
+task_default_queue = 'chat_api_tasks'
 task_serializer = 'json'
 accept_content = ['json']
 task_always_eager = False

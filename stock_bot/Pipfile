@@ -4,13 +4,9 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-flask = "*"
-flask-socketio = "*"
-wheel = "*"
-mongoengine = "*"
 requests = "*"
-kombu = "*"
 celery = {extras = ["librabbitmq"], version = "*"}
+kombu = "*"
 
 [dev-packages]
 autopep8 = "*"
