@@ -6,11 +6,15 @@ from contextlib import contextmanager
 from celery import Celery, shared_task
 from celery.utils.log import get_task_logger
 from kombu.exceptions import ConnectionError, HttpError, OperationalError
+from mongoengine import connect
 
 from api.tasks.celeryconfig import Config
+from api.models import Message
 
 logger = get_task_logger('chat_api')
 
+connect('chat_api', username='appUser',
+        password='passwordForAppUser', authentication_source='admin')
 
 CeleryStockBot = Celery(
     'stock_bot',
@@ -26,7 +30,6 @@ def send_to_stock_bot(data: dict, task: str, queue: str):
         logger.exception(f'Unexpected Error: {err}')
         raise err
 
-
 @shared_task(
     name='get_stock_info',
     default_retry_delay=5,
@@ -38,11 +41,29 @@ def send_to_stock_bot(data: dict, task: str, queue: str):
 def get_stock_info(stock_code: str):
     try:
         send_to_stock_bot({
-            'stock': stock_code
+            'stock_code': stock_code
         },
             task='stock_bot.get_stock_info',
             queue='stock_bot_info'
         )
         logger.info(f'Sent get_stock_info to StockBot: {stock_code}')
+    except Exception as err:
+        logger.exception(f'Unexpected Error: {err}')
+
+
+@shared_task(
+    name='register_stock_info',
+    default_retry_delay=5,
+    max_retries=1800 // 5,
+    ignore_result=True,
+    autoretry_for=(ConnectionError, HttpError,
+                   OperationalError, ConnectionRefusedError, socket.error),
+)
+def register_stock_info(body):
+    try:
+        stock = json.loads(body[1].get('stock'))
+        content = f'{stock.get("Symbol")} quote is ${stock.get("Close")} per share'
+        msg = Message(text=content).save()
+        logger.info(f'Registering StockBot reply on message document {msg}')
     except Exception as err:
         logger.exception(f'Unexpected Error: {err}')

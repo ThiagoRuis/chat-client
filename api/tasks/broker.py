@@ -3,7 +3,7 @@ from typing import Iterable
 
 from kombu import Connection, Exchange, Queue
 
-from stock_bot.celeryconfig import broker_url
+from api.tasks.celeryconfig import broker_url
 
 
 def conn() -> Connection:
@@ -20,15 +20,15 @@ class ListStatesEnumMixin:
 
 
 class ExchangeEnum(ListStatesEnumMixin):
-    STOCK_BOT_EXCHANGE = 'stock_bot'
+    CHAT_API_EXCHANGE = 'chat_api'
 
 
 class QueueEnum(ListStatesEnumMixin):
-    STOCK_BOT_INFO = 'stock_bot_info'
+    STOCK_BOT_REPLY = 'chat_api_stock_bot_reply'
 
 
 class RoutingKeyEnum(ListStatesEnumMixin):
-    STOCK_BOT_INFO = f'{ExchangeEnum.STOCK_BOT_EXCHANGE}.read'
+    STOCK_BOT_REPLY = f'{ExchangeEnum.CHAT_API_EXCHANGE}.read'
 
 
 BrokerResources = namedtuple(
@@ -36,10 +36,10 @@ BrokerResources = namedtuple(
 
 
 class BrokerConnEnum(ListStatesEnumMixin):
-    STOCK_BOT_INFO = BrokerResources(
-        ExchangeEnum.STOCK_BOT_EXCHANGE,
-        QueueEnum.STOCK_BOT_INFO,
-        RoutingKeyEnum.STOCK_BOT_INFO
+    STOCK_BOT_REPLY = BrokerResources(
+        ExchangeEnum.CHAT_API_EXCHANGE,
+        QueueEnum.STOCK_BOT_REPLY,
+        RoutingKeyEnum.STOCK_BOT_REPLY
     )
 
 

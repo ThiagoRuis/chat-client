@@ -4,9 +4,9 @@ from celery.canvas import Signature
 from celery.utils.log import get_task_logger
 from kombu import Consumer, Exchange, Message, Queue
 
-from stock_bot.broker import BrokerResources, BrokerConnEnum
+from api.tasks.broker import BrokerResources, BrokerConnEnum
 
-logger = get_task_logger('stock_bot')
+logger = get_task_logger('chat_api')
 
 
 class ConsumerMixin:

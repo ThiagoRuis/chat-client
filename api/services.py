@@ -11,8 +11,9 @@ from api.tasks.tasks import get_stock_info
 class ChatService(Namespace):
     #TODO: Check how to handle unknown command
     def on_connect(self):
+        emit('stock', {}, namespace='command')
         print('ChatService connected')
-        emit('help', namespace='/command')
+        
 
     def on_disconnect(self):
         print('ChatService disconnected')
@@ -24,6 +25,11 @@ class ChatService(Namespace):
         message = Message(text=data.get('msg'), user=user).save()
 
         emit('broadcast_message', message.to_json(), broadcast=True)
+
+    def on_list_messages(self, data):
+        messages = Message.objects().order_by('-timestamp')[:2]
+
+        emit('list_messages_reply', messages.to_json(), broadcast=True)
 
 
 class IdentificationService(Namespace):
@@ -64,7 +70,8 @@ class CommandService(Namespace):
         get_stock_info(stock_code)
         
         print(f'called stock check to: {data}')
-        emit('broadcast_message', json.dumps(stock_code), broadcast=True)
+       
+
 
     def on_create_user(self, data, connected_user=None):
         new_user = User(name=data).save()

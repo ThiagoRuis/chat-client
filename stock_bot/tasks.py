@@ -53,16 +53,16 @@ def send_to_chat_api(data: dict, task: str, queue: str):
     autoretry_for=(ConnectionError, TimeoutError, HttpError,
                    OperationalError, ConnectionRefusedError, socket.error),
 )
-def get_stock_info(stock_code: str):
+def get_stock_info(body):
     try:
-        info = stock_info(stock_code)
-
+        data = body[1]
+        info = stock_info(data.get('stock_code'))
         send_to_chat_api({
             'stock': json.dumps(info)
         },
             task='chat_api.get_stock_info',
             queue='chat_api_stock_bot_reply'
         )
-        logger.info(f'Sent stock info to ChatAPI: {stock_code}')
+        logger.info(f'Sent stock info to ChatAPI: {info}')
     except Exception as err:
         logger.exception(f'Unexpected Error: {err}')

@@ -9,5 +9,5 @@ def stock_info(stock_code:str) -> Dict:
         stock_file_str = s.get(endpoint).content.decode('utf-8')
         lines = stock_file_str.splitlines()
         stock_data = list(csv.DictReader(lines))
-    
+
     return stock_data[0] #TODO: get the latest info if more lines come from endpoint
