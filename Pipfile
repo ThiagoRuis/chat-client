@@ -10,6 +10,7 @@ wheel = "*"
 mongoengine = "*"
 requests = "*"
 kombu = "*"
+celery = {extras = ["librabbitmq"], version = "*"}
 
 [dev-packages]
 autopep8 = "*"

@@ -1,0 +1,19 @@
+mongo --port 27017 -u "root" -p --authenticationDatabase "admin"
+
+use admin
+db.createUser(
+  {
+    user: "admin",
+    pwd: "admin",
+    roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
+  }
+)
+
+use admin
+db.createUser(
+  {
+    user: "appUser",
+    pwd: "passwordForAppUser",
+    roles: [ { role: "readWrite", db: "chat_api" } ]
+  }
+)
