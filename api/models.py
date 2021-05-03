@@ -10,8 +10,7 @@ from mongoengine import (
 
 
 class User(Document):
-    email = StringField()
-    name = StringField(required=True)
+    email = StringField(required=True, unique=True)
 
 
 class Message(Document):

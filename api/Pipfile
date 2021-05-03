@@ -10,6 +10,7 @@ wheel = "*"
 mongoengine = "*"
 kombu = "*"
 celery = {extras = ["librabbitmq"], version = "*"}
+python-dotenv = "*"
 
 [dev-packages]
 autopep8 = "*"

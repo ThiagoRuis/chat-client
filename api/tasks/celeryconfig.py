@@ -1,9 +1,13 @@
+from dotenv import load_dotenv
+import os
+load_dotenv()
+
 class Config():
-    BROKER_USER = 'guest'
-    BROKER_PASS = 'guest'
-    BROKER_HOST = '127.0.0.1'
-    BROKER_NODE_PORT = 5672
-    BROKER_VIRTUAL_HOST = ''
+    BROKER_USER = os.getenv('BROKER_USER')
+    BROKER_PASS = os.getenv('BROKER_PASS')
+    BROKER_HOST = os.getenv('BROKER_HOST')
+    BROKER_NODE_PORT = os.getenv('BROKER_NODE_PORT')
+    BROKER_VIRTUAL_HOST = os.getenv('BROKER_VIRTUAL_HOST')
 
 
 broker_url = (

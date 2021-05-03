@@ -1,0 +1,2 @@
+class HasNoUser(Exception):
+    pass

@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+import os
 from flask import Flask, render_template
 from flask_socketio import SocketIO, send, emit
 
@@ -6,14 +8,15 @@ from mongoengine import connect
 from services import ChatService, IdentificationService, CommandService
 from api.tasks.celeryconfig import Config
 
+load_dotenv()
 app = Flask(__name__)
 
 # Application SETUP
-app.config['SECRET_KEY'] = 'secret!'
+app.config['SECRET_KEY'] = os.getenv('APP_SECRET_KEY')
 
 #Mongo connect
-connect('chat_api', username='appUser',
-        password='passwordForAppUser', authentication_source='admin')
+connect(os.getenv('APP_DATABASE'), username=os.getenv('APP_MONGO_USER'),
+        password=os.getenv('APP_MONGO_PASS'), authentication_source='admin')
 
 #SocketIO initialization
 
