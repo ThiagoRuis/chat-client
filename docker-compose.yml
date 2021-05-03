@@ -33,19 +33,18 @@ services:
       - 5672:5672
       - 15672:15672
 
-  # api:
-  #   build: 
-  #     context: .
-  #     dockerfile: dockerfile-api
-  #   env_file:
-  #     - .env
-  #   volumes:
-  #     - ./api:/usr/local/src/api
-  #   ports:
-  #     - 5000:5000
-  #   stdin_open: true
-  #   tty: true 
-  #   command: sh -c "flask run -h 0.0.0.0"
+  api:
+    build: 
+      context: .
+      dockerfile: dockerfile-api
+    env_file:
+      - .env
+    network_mode: "host"
+    volumes:
+      - ./api:/usr/local/src/api
+    stdin_open: true
+    tty: true 
+    command: sh -c "flask run -h 0.0.0.0"
 
   api_celery:
     container_name: api_celery
@@ -61,6 +60,24 @@ services:
     stdin_open: true
     tty: true 
     command: sh -c "celery -A tasks.celery worker -E --autoscale=10,2 -l info -O fair -n chat_api@%n"
+    depends_on: 
+      - rabbitmq
+      - mongo
+
+  stock_bot:
+    container_name: stock_bot
+    build: 
+      context: .
+      dockerfile: dockerfile-bot
+    restart: always
+    network_mode: "host"
+    env_file:
+      - .env
+    volumes:
+      - ./stock_bot:/usr/local/src/stock_bot
+    stdin_open: true
+    tty: true 
+    command: sh -c "celery -A stock_bot.celery worker -E --autoscale=10,2 -l info -O fair -n stock_bot@%n"
     depends_on: 
       - rabbitmq
       - mongo

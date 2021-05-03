@@ -3,7 +3,7 @@ from typing import Iterable
 
 from kombu import Connection, Exchange, Queue
 
-from stock_bot.celeryconfig import broker_url
+from celeryconfig import broker_url
 
 
 def conn() -> Connection:

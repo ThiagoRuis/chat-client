@@ -7,8 +7,8 @@ from celery import Celery, shared_task
 from celery.utils.log import get_task_logger
 from kombu.exceptions import ConnectionError, HttpError, OperationalError
 
-from stock_bot.celeryconfig import Config
-from stock_bot.services import stock_info
+from celeryconfig import Config
+from services import stock_info
 
 logger = get_task_logger('stock_bot')
 

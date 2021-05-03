@@ -1,15 +1,15 @@
 FROM python:3.9-slim
 
 ENV PIP_NO_CACHE_DIR=off \
-PYTHONPATH=/usr/local/src/api
+PYTHONPATH=/usr/local/src/stock_bot
 
 RUN apt-get update && apt-get install -y --no-install-recommends gcc
 
-WORKDIR /usr/local/src/api
+WORKDIR /usr/local/src/stock_bot
 
 RUN pip install pipenv 
 
-COPY api/Pipfile api/Pipfile.lock ./
+COPY stock_bot/Pipfile stock_bot/Pipfile.lock ./
 
 RUN pipenv install --system
 

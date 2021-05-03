@@ -20,7 +20,7 @@ class ChatService(Namespace):
         emit('broadcast_message', message.to_json(), broadcast=True)
 
     def on_list_messages(self, data):
-        messages = Message.objects().order_by('-timestamp')[:2]
+        messages = Message.objects().order_by('-timestamp')[:50]
 
         emit('list_messages_reply', messages.to_json(), broadcast=True)
 
