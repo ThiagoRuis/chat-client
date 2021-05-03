@@ -1,5 +1,5 @@
 from models import User
-from api.exceptions import HasNoUser 
+from exceptions import HasNoUser 
 
 def has_user(function_to_decorate): #TODO improve this
     def has_user_wrapper(*args):

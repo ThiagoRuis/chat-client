@@ -1,6 +1,7 @@
 version: '3'
 services:
   mongo:
+    container_name: mongo
     image: mongo
     restart: always
     env_file:
@@ -10,16 +11,16 @@ services:
     volumes:
       - ./mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
 
-  mongo-express:
-    image: mongo-express
-    restart: always
-    depends_on: 
-      - mongo
-    ports:
-      - 8081:8081
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: root
+  # mongo-express:
+  #   image: mongo-express
+  #   restart: always
+  #   depends_on: 
+  #     - mongo
+  #   ports:
+  #     - 8081:8081
+  #   environment:
+  #     ME_CONFIG_MONGODB_ADMINUSERNAME: root
+  #     ME_CONFIG_MONGODB_ADMINPASSWORD: root
 
   rabbitmq:
     container_name: rabbitmq
@@ -32,15 +33,37 @@ services:
       - 5672:5672
       - 15672:15672
 
-  api:
-    build: ./Dockerfile
-    ports:
-      - 5000:5000
+  # api:
+  #   build: 
+  #     context: .
+  #     dockerfile: dockerfile-api
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - ./api:/usr/local/src/api
+  #   ports:
+  #     - 5000:5000
+  #   stdin_open: true
+  #   tty: true 
+  #   command: sh -c "flask run -h 0.0.0.0"
+
+  api_celery:
+    container_name: api_celery
+    build: 
+      context: .
+      dockerfile: dockerfile-api
+    restart: always
+    network_mode: "host"
     env_file:
       - .env
-    # volumes:
-    #   - .api:/usr/local/src/app
-    command: sh -c "flask run -h 0.0.0.0"
+    volumes:
+      - ./api:/usr/local/src/api
+    stdin_open: true
+    tty: true 
+    command: sh -c "celery -A tasks.celery worker -E --autoscale=10,2 -l info -O fair -n chat_api@%n"
+    depends_on: 
+      - rabbitmq
+      - mongo
 
 
   # elasticsearch:
@@ -80,6 +103,6 @@ services:
   #   ports:
   #     - "5555:5555"
 
-volumes:
-  mongodbdata:
-    driver: local
+# volumes:
+#   mongodbdata:
+#     driver: local

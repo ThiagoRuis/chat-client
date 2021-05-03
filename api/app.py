@@ -6,7 +6,7 @@ from flask_socketio import SocketIO, send, emit
 from mongoengine import connect
 
 from services import ChatService, IdentificationService, CommandService
-from api.tasks.celeryconfig import Config
+from tasks.celeryconfig import Config
 
 load_dotenv()
 app = Flask(__name__)

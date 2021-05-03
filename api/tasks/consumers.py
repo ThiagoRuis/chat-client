@@ -5,9 +5,9 @@ from celery.bootsteps import ConsumerStep
 from celery.utils.log import get_task_logger
 from kombu import Consumer, Message
 
-from api.tasks.broker import BrokerConnEnum
-from api.tasks.utils import ConsumerMixin
-from api.tasks.tasks import register_stock_info
+from tasks.broker import BrokerConnEnum
+from tasks.utils import ConsumerMixin
+from tasks.tasks import register_stock_info
 
 logger = get_task_logger('chat_api')
 

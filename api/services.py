@@ -7,8 +7,8 @@ from mongoengine import NotUniqueError
 
 from models import User, Message
 from decorators import has_user
-from api.tasks.tasks import get_stock_info
-from api.exceptions import HasNoUser
+from tasks.tasks import get_stock_info
+from exceptions import HasNoUser
 
 class ChatService(Namespace):
     @has_user

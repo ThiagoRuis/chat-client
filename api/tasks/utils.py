@@ -4,7 +4,7 @@ from celery.canvas import Signature
 from celery.utils.log import get_task_logger
 from kombu import Consumer, Exchange, Message, Queue
 
-from api.tasks.broker import BrokerResources, BrokerConnEnum
+from tasks.broker import BrokerResources, BrokerConnEnum
 
 logger = get_task_logger('chat_api')
 

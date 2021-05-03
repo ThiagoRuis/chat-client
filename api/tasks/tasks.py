@@ -10,8 +10,8 @@ from celery.utils.log import get_task_logger
 from kombu.exceptions import ConnectionError, HttpError, OperationalError
 from mongoengine import connect
 
-from api.tasks.celeryconfig import Config
-from api.models import Message
+from tasks.celeryconfig import Config
+from models import Message
 
 load_dotenv()
 logger = get_task_logger('chat_api')
