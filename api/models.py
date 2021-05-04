@@ -6,11 +6,24 @@ from mongoengine import (
     DateTimeField,
     ReferenceField,
     ListField,
+    BooleanField,
+    SequenceField,
 )
 
 
 class User(Document):
     email = StringField(required=True, unique=True)
+    id = SequenceField()
+    is_authenticated = BooleanField(default=False)
+    is_active = BooleanField()
+    is_anonymous = BooleanField(default=True)
+
+    def get_id(self):
+        return id
+
+    def save(self):
+        self.is_anonymous = False
+        super.save()
 
 
 class Message(Document):

@@ -1,7 +1,9 @@
 from dotenv import load_dotenv
 import os
+
 from flask import Flask, render_template
 from flask_socketio import SocketIO, send, emit
+from flask_login import LoginManager
 
 from mongo_database import conn
 from services import ChatService, IdentificationService, CommandService
@@ -9,6 +11,7 @@ from tasks.celeryconfig import Config
 
 load_dotenv()
 app = Flask(__name__)
+login = LoginManager(app)
 
 # Application SETUP
 app.config['SECRET_KEY'] = os.getenv('APP_SECRET_KEY')

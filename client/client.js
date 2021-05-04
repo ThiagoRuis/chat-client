@@ -44,9 +44,9 @@
     alert("AE CARAIO");
   });
 
-  setInterval(function(){
-    chatConnection.emit('list_messages', user);
-  }, 2000);
+  // setInterval(function(){
+  //   chatConnection.emit('list_messages', user);
+  // }, 2000);
 
   messageTextComposition = function(msg) {
     content = msg.text;

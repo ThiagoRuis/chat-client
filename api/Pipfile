@@ -11,6 +11,7 @@ mongoengine = "*"
 kombu = "*"
 celery = {extras = ["librabbitmq"], version = "*"}
 python-dotenv = "*"
+flask-login = "*"
 
 [dev-packages]
 autopep8 = "*"
