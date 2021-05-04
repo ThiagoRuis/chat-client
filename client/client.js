@@ -38,6 +38,10 @@
 
   chatConnection.on('connect', function(){
     chatConnection.emit('login', user);
+  });  
+  
+  chatConnection.on('teste', function(){
+    alert("AE CARAIO");
   });
 
   setInterval(function(){
