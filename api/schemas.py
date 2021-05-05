@@ -8,5 +8,5 @@ class UserCreateSchema(Schema):
 
 
 class UserSchema(Schema):
-    id = fields.Integer()
+    id = fields.String()
     username = fields.String()
