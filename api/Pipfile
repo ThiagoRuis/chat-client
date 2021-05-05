@@ -10,8 +10,9 @@ wheel = "*"
 mongoengine = "*"
 kombu = "*"
 celery = {extras = ["librabbitmq"], version = "*"}
-python-dotenv = "*"
 flask-login = "*"
+dynaconf = "*"
+flask-rebar = "*"
 
 [dev-packages]
 autopep8 = "*"

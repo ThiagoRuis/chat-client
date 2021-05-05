@@ -13,6 +13,8 @@ from mongoengine import (
 
 class User(Document):
     email = StringField(required=True, unique=True)
+    username = StringField()
+    password = StringField()
     id = SequenceField()
     is_authenticated = BooleanField(default=False)
     is_active = BooleanField()
@@ -23,7 +25,7 @@ class User(Document):
 
     def save(self):
         self.is_anonymous = False
-        super.save()
+        Document.save(self)
 
 
 class Message(Document):

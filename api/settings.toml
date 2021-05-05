@@ -1,0 +1,23 @@
+[default]
+"FLASK_APP" = 'api/app.py'
+
+EXTENSIONS = [
+    'routes:init_app',
+    'ext.routes:init_app',
+    'ext.mongo_database:init_app',
+]
+
+# DATABASE - Mongo
+MONGO_INITDB_ROOT_USERNAME = 'root'
+MONGO_INITDB_ROOT_PASSWORD = 'root'
+MONGO_APP_DATABASE = 'chat_api'
+MONGO_APP_USER = 'appUser'
+MONGO_APP_PASSWORD = 'appUser'
+MONGO_APP_AUTH_SOURCE = 'admin'
+
+#RabbitMQ
+BROKER_USER = 'guest'
+BROKER_PASS = 'guest'
+BROKER_HOST = '127.0.0.1'
+BROKER_NODE_PORT = 5672
+BROKER_VIRTUAL_HOST = ''

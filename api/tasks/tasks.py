@@ -1,5 +1,3 @@
-from dotenv import load_dotenv
-import os
 import json
 import signal
 import socket
@@ -13,7 +11,6 @@ from mongoengine import connect
 from tasks.celeryconfig import Config
 from models import Message
 
-load_dotenv()
 logger = get_task_logger('chat_api')
 
 connect(os.getenv('APP_DATABASE'), username=os.getenv('APP_MONGO_USER'),
