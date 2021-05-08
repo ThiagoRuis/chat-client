@@ -13,24 +13,14 @@ from mongoengine import (
 
 
 class User(Document):
-    id = UUIDField()
+    _id = UUIDField()
     email = StringField(required=True, unique=True)
     username = StringField()
     password = StringField()
-    is_authenticated = BooleanField(default=False)
-    is_active = BooleanField()
-    is_anonymous = BooleanField(default=True)
-
-    def get_id(self):
-        return str(id)
-
-    def save(self):
-        self.is_anonymous = False
-        Document.save(self)
 
 
 class Message(Document):
-    text = StringField()
+    text = StringField(required=True)
     timestamp = DateTimeField(default=datetime.utcnow)
     user = ReferenceField(User)
 

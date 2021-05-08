@@ -1,5 +1,6 @@
 [default]
-"FLASK_APP" = 'api/app.py'
+FLASK_APP = 'api/app.py'
+STAGING = 'project.server.config.DevelopmentConfig'
 
 EXTENSIONS = [
     'routes:init_app',

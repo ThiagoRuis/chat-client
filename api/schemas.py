@@ -6,6 +6,10 @@ class UserCreateSchema(Schema):
     email = fields.Email()
     password = fields.String()
 
+class UserLoginSchema(Schema):
+    id = fields.String()
+    password = fields.String()
+
 
 class UserSchema(Schema):
     id = fields.String()

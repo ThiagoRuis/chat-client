@@ -10,12 +10,13 @@ wheel = "*"
 mongoengine = "*"
 kombu = "*"
 celery = {extras = ["librabbitmq"], version = "*"}
-flask-login = "*"
 dynaconf = "*"
 flask-rebar = "*"
 
 [dev-packages]
 autopep8 = "*"
+pytest = "*"
+mongomock = "*"
 
 [requires]
 python_version = "3.9"
